@@ -85,6 +85,9 @@ public class EmployeeDao {
 		}); // End of return statement
 	}
 
+	/*
+	 * Updates an employee details
+	 */
 	public int updateUser(Employee employee) {
 		String sql = "update LibraryUser set employeeid = ?, googleId = ?, firstName = ?, middleName = ?, lastName = ?, ManagerId = ?, MobileNo = ?, cityId = ?, password = ?  where emailId = ?";
 
@@ -93,11 +96,18 @@ public class EmployeeDao {
 				employee.getCityId(), employee.getPassword(), employee.getEmailId());
 	}
 	
+	
+	/*
+	 * Gives the details of the Employee by taking emailId as argument.
+	 */
 	public Employee getEmployee(String emailId){
 		String sql = "select * from LibraryUser where emailId = " + emailId;
 		
 		return jdbcTemplate.query(sql, new ResultSetExtractor<Employee>(){
 
+			/* (non-Javadoc)
+			 * @see org.springframework.jdbc.core.ResultSetExtractor#extractData(java.sql.ResultSet)
+			 */
 			public Employee extractData(ResultSet rs) throws SQLException, DataAccessException {
 				Employee employee = new Employee();
 				while(rs.next()){
@@ -118,8 +128,88 @@ public class EmployeeDao {
 		});
 	}
 	
-	public boolean blackListEmployee(){
+	
+	/*
+	 * Adding an Employee to the BlackList
+	 */
+	public boolean blackListEmployee(final String emailId){
+		String sql = "insert into blackListEmployee (emailId) values(?)";
 		
+		return jdbcTemplate.execute(sql, new PreparedStatementCallback<Boolean>(){
+
+			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+				ps.setString(1, emailId);
+				return ps.execute();
+			}
+			
+		});
+	}
+	
+	/*
+	 * Removing an employee from BlackList 
+	 */
+	public int removeBlackListEmployee(final String emailId){
+		String sql = "delete from blackListEmployee where emailId = ?";
+		
+		return jdbcTemplate.update(sql,emailId);
 	}
 
+	/*
+	 * Function that returns the emailId if it is present else returns null String 
+	 */
+	public String isAdmin(String emailId){
+		String sql = "select count(*) from admins where emailId = " + emailId;
+		
+		return jdbcTemplate.query(sql, new ResultSetExtractor<String>(){
+
+			public String extractData(ResultSet rs) throws SQLException, DataAccessException {
+				String emailId = null;
+				
+				while(rs.next()){
+					emailId = rs.getString(emailId);
+				}
+				
+				return emailId;
+			}
+			
+		});
+	}
+	
+	public boolean addAdmin(final String emailId){
+		String duplicateEmailId = null;
+		duplicateEmailId = isAdmin(emailId);
+		
+		/*
+		 * Checking if the user is already present in the database
+		 */
+		if(duplicateEmailId.equalsIgnoreCase(emailId)){
+			return true;
+		}
+		
+		/*
+		 * Adding the user to the admins database.
+		 */
+		else{
+			String sql = "insert into admins (emailId) values(?)";
+			
+			return jdbcTemplate.execute(sql, new PreparedStatementCallback<Boolean>() {
+
+				public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+					ps.setString(1, emailId);
+					return ps.execute();
+				}			
+			});
+		}
+	}
+	
+	
+	/*
+	 * Removing an admin from the admins table.
+	 */
+	public int deleteAdmin(String emailId){
+		String sql = "delete from admins where emailId = " + emailId;
+		
+		return jdbcTemplate.update(sql);
+	}
+	
 }
