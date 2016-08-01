@@ -16,10 +16,10 @@ public class Book {
 	public void setTitleId(int titleId) {
 		TitleId = titleId;
 	}
-	public String getAllocated() {
+	public int getAllocated() {
 		return allocated;
 	}
-	public void setAllocated(String allocated) {
+	public void setAllocated(int allocated) {
 		this.allocated = allocated;
 	}
 	public int getLocationId() {
@@ -29,7 +29,7 @@ public class Book {
 		this.locationId = locationId;
 	}
 	private int TitleId;
-	private String allocated ;
+	private int allocated ;
 	private int locationId;
 	
 	

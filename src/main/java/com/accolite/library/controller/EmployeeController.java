@@ -13,6 +13,22 @@ import com.accolite.library.service.EmployeeService;
 @Controller
 public class EmployeeController {
 
+	public EmployeeService getEmployeeService() {
+		return employeeService;
+	}
+
+	public void setEmployeeService(EmployeeService employeeService) {
+		this.employeeService = employeeService;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
 	@Autowired
 	private EmployeeService employeeService;
 	
@@ -29,6 +45,7 @@ public class EmployeeController {
 	@RequestMapping(value = "/Admin",method=RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public String addAdmin(@RequestParam("emailId") String emailId ){
+		System.out.println(emailId);
 		String status = employeeService.addAdmin(emailId);
 		return status;
 	}

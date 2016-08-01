@@ -3,16 +3,22 @@ package com.accolite.library.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.accolite.library.model.Book;
 import com.accolite.library.service.BookService;
 
 public class BookController {
 	BookService bookservice=new BookService();
 	
+	//@RequestMapping(value = "/InsertBook",method=RequestMethod.GET,produces="application/json")
+	//@ResponseBody
 	public void InsertBook(){
 		Book book=new Book();
 		
-		book.setAllocated("Available");
+		book.setAllocated(0);
 		book.setLocationId(1);
 		book.setTitleId(1);
 		if(bookservice.InsertNewBook(book))
@@ -40,12 +46,12 @@ public class BookController {
 		
 	}
 	
-	/*public static void main(String args[])
+	public static void main(String args[])
 	{
 		BookController b=new BookController();
 		b.InsertBook();
 	}
-	*/
+	
 	
 
 }

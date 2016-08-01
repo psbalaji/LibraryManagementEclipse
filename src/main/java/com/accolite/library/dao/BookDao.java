@@ -27,7 +27,7 @@ public class BookDao {
       return jdbcTemplate.execute(sql, new PreparedStatementCallback<Boolean>() {
       public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
       ps.setInt(2, book.getTitleId());
-      ps.setString(3, book.getAllocated());
+      ps.setInt(3, book.getAllocated());
       ps.setInt(4, book.getLocationId());
       return ps.execute();
      }
@@ -53,7 +53,7 @@ public class BookDao {
 		     Book book = new Book();
 		     book.setBookId(rs.getInt(1));
 		     book.setTitleId(rs.getInt(2));
-		     book.setAllocated(rs.getString(3));
+		     book.setAllocated(rs.getInt(3));
 		     book.setLocationId(rs.getInt(4));
 		     
 		     list.add(book);

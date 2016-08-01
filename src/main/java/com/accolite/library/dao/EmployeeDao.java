@@ -169,24 +169,25 @@ public class EmployeeDao {
 	 * Function that returns the emailId if it is present else returns null String 
 	 */
 	public String isAdmin(final String emailId){
-		String sql = "select count(*) from admins where emailId = ?"  ;
+		String sql = "use Library select emailId from admins where emailId = ?" ;
 		
 		return jdbcTemplate.query(sql, new PreparedStatementSetter(){
 
 			public void setValues(PreparedStatement ps) throws SQLException {
-				//ps.setString(1, emailId);
+				ps.setString(1, emailId);
 				
 			}
 			
 		},new ResultSetExtractor<String>(){
 
+			/* (non-Javadoc)
+			 * @see org.springframework.jdbc.core.ResultSetExtractor#extractData(java.sql.ResultSet)
+			 */
 			public String extractData(ResultSet rs) throws SQLException, DataAccessException {
 				String emailId = null;
-				
 				while(rs.next()){
-					emailId = rs.getString(1);
+					emailId = rs.getString("emailId");
 				}
-				
 				return emailId;
 			}
 			
@@ -195,29 +196,34 @@ public class EmployeeDao {
 	
 	public boolean addAdmin(final String emailId){
 		String duplicateEmailId = null;
+		System.out.println(emailId);
 		duplicateEmailId = isAdmin(emailId);
 		
 		/*
 		 * Checking if the user is already present in the database
 		 */
-		if(duplicateEmailId.equalsIgnoreCase(emailId)){
-			return true;
+		if(duplicateEmailId != null){
+			if(duplicateEmailId.equalsIgnoreCase(emailId)){
+				return true;
+			}
 		}
+		
 		
 		/*
 		 * Adding the user to the admins database.
 		 */
-		else{
+		
 			String sql = "insert into admins (emailId) values(?)";
 			
 			return jdbcTemplate.execute(sql, new PreparedStatementCallback<Boolean>() {
 
 				public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
 					ps.setString(1, emailId);
-					return ps.execute();
+					ps.execute();
+					return true; 
 				}			
 			});
-		}
+		
 	}
 	
 	

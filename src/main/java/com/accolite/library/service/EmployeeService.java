@@ -36,6 +36,8 @@ public class EmployeeService {
 	public String addAdmin(String emailId){
 		boolean flag = employeeDao.addAdmin(emailId);
 		
+		System.out.println(flag);
+		
 		if(flag){
 			return "success";
 		}
