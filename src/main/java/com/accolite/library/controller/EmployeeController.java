@@ -82,16 +82,36 @@ public class EmployeeController {
 		return status;
 	}
 	
-	@RequestMapping(value = "/blacklist",method=RequestMethod.POST,produces="application/json")
+	@RequestMapping(value = "/blacklist",method=RequestMethod.GET,produces="application/json")
 	@ResponseBody
-	public String login(@RequestParam("emailId") String emailId){
+	public String blackList(@RequestParam("emailId") String emailId){
 		boolean adminFlag = loggedUser.isAdminFlag();
 		if(adminFlag){
-			
+			boolean flag = employeeService.blackListEmployee(emailId);
+			if (flag)
 			return "success";
+			else
+				return "failure to add";
 		}
 		else{
 			return "you donot have permissions";
 		}
 	}
+	
+	@RequestMapping(value = "/blacklist",method=RequestMethod.DELETE,produces="application/json")
+	@ResponseBody
+	public String removeBlackList(@RequestParam("emailId") String emailId){
+		boolean adminFlag = loggedUser.isAdminFlag();
+		if(adminFlag){
+			boolean flag = employeeService.removeBlackListEmployee(emailId);
+			if (flag)
+			return "success";
+			else
+				return "failure to add";
+		}
+		else{
+			return "you donot have permissions";
+		}
+	}
+	
 }

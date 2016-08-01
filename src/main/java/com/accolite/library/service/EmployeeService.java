@@ -56,5 +56,14 @@ public class EmployeeService {
 		}
 	}
 	
+	public boolean blackListEmployee(String emailId){
+		return employeeDao.blackListEmployee(emailId);
+	}
+
+	public boolean removeBlackListEmployee(String emailId) {
+		
+		return employeeDao.removeBlackListEmployee(emailId);
+	}
+	
 	
 }
