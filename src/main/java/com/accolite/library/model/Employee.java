@@ -15,13 +15,18 @@
 */
 package com.accolite.library.model;
 
-import org.springframework.stereotype.Repository;
+import javax.xml.bind.annotation.XmlRootElement;
 
-// TODO: Auto-generated Javadoc
+import org.springframework.stereotype.Component;
+
+
+
 /**
  * The Class Employee.
  */
-@Repository
+
+@Component
+@XmlRootElement
 public class Employee {
 
 	/** The email id. */

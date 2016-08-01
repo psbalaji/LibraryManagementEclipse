@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
@@ -100,10 +101,20 @@ public class EmployeeDao {
 	/*
 	 * Gives the details of the Employee by taking emailId as argument.
 	 */
-	public Employee getEmployee(String emailId){
-		String sql = "select * from LibraryUser where emailId = " + emailId;
+	public Employee getEmployee(final String emailId){
 		
-		return jdbcTemplate.query(sql, new ResultSetExtractor<Employee>(){
+		System.out.println(jdbcTemplate);
+		
+		String sql = "select * from LibraryUser where emailId = ?" ;
+		
+		return jdbcTemplate.query(sql, new PreparedStatementSetter(){
+
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setString(1, emailId);
+				
+			}
+			
+		},new ResultSetExtractor<Employee>(){
 
 			/* (non-Javadoc)
 			 * @see org.springframework.jdbc.core.ResultSetExtractor#extractData(java.sql.ResultSet)
@@ -157,10 +168,17 @@ public class EmployeeDao {
 	/*
 	 * Function that returns the emailId if it is present else returns null String 
 	 */
-	public String isAdmin(String emailId){
-		String sql = "select count(*) from admins where emailId = " + emailId;
+	public String isAdmin(final String emailId){
+		String sql = "select count(*) from admins where emailId = ?" ;
 		
-		return jdbcTemplate.query(sql, new ResultSetExtractor<String>(){
+		return jdbcTemplate.query(sql, new PreparedStatementSetter(){
+
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setString(1, emailId);
+				
+			}
+			
+		},new ResultSetExtractor<String>(){
 
 			public String extractData(ResultSet rs) throws SQLException, DataAccessException {
 				String emailId = null;
@@ -211,5 +229,7 @@ public class EmployeeDao {
 		
 		return jdbcTemplate.update(sql);
 	}
+
+
 	
 }

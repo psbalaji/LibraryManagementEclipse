@@ -1,4 +1,4 @@
-package com.library.controller;
+package com.accolite.library.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +40,12 @@ public class BookController {
 		
 	}
 	
-	public static void main(String args[])
+	/*public static void main(String args[])
 	{
 		BookController b=new BookController();
 		b.InsertBook();
 	}
-	
+	*/
 	
 
 }
