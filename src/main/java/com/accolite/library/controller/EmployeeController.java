@@ -16,6 +16,7 @@
 package com.accolite.library.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.accolite.library.model.Employee;
-import com.accolite.library.model.LoggedUser;
+//import com.accolite.library.model.LoggedUser;
 import com.accolite.library.service.EmployeeService;
 
 @Controller
@@ -51,8 +52,6 @@ public class EmployeeController {
 	@Autowired 
 	private Employee employee;
 	
-	@Autowired
-	private LoggedUser loggedUser;
 	
 	/**
 	 * Gets the employee.
@@ -85,7 +84,7 @@ public class EmployeeController {
 	@RequestMapping(value = "/blacklist",method=RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public String blackList(@RequestParam("emailId") String emailId){
-		boolean adminFlag = loggedUser.isAdminFlag();
+		boolean adminFlag = true;
 		if(adminFlag){
 			boolean flag = employeeService.blackListEmployee(emailId);
 			if (flag)
@@ -101,7 +100,7 @@ public class EmployeeController {
 	@RequestMapping(value = "/blacklist",method=RequestMethod.DELETE,produces="application/json")
 	@ResponseBody
 	public String removeBlackList(@RequestParam("emailId") String emailId){
-		boolean adminFlag = loggedUser.isAdminFlag();
+		boolean adminFlag = true;
 		if(adminFlag){
 			boolean flag = employeeService.removeBlackListEmployee(emailId);
 			if (flag)

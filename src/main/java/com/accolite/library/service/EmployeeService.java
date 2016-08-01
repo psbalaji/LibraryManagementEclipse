@@ -62,7 +62,13 @@ public class EmployeeService {
 
 	public boolean removeBlackListEmployee(String emailId) {
 		
-		return employeeDao.removeBlackListEmployee(emailId);
+		int i =  employeeDao.removeBlackListEmployee(emailId);
+		if(i > 0){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	
