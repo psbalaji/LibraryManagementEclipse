@@ -169,12 +169,12 @@ public class EmployeeDao {
 	 * Function that returns the emailId if it is present else returns null String 
 	 */
 	public String isAdmin(final String emailId){
-		String sql = "select count(*) from admins where emailId = ?" ;
+		String sql = "select count(*) from admins where emailId = ?"  ;
 		
 		return jdbcTemplate.query(sql, new PreparedStatementSetter(){
 
 			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setString(1, emailId);
+				//ps.setString(1, emailId);
 				
 			}
 			
@@ -184,7 +184,7 @@ public class EmployeeDao {
 				String emailId = null;
 				
 				while(rs.next()){
-					emailId = rs.getString(emailId);
+					emailId = rs.getString(1);
 				}
 				
 				return emailId;
@@ -225,9 +225,9 @@ public class EmployeeDao {
 	 * Removing an admin from the admins table.
 	 */
 	public int deleteAdmin(String emailId){
-		String sql = "delete from admins where emailId = " + emailId;
+		String sql = "delete from admins where emailId = ?" ;
 		
-		return jdbcTemplate.update(sql);
+		return jdbcTemplate.update(sql,emailId);
 	}
 
 
