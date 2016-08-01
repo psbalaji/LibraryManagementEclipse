@@ -1,3 +1,18 @@
+/****************************************************************************
+
+* Copyright (c) 2016 by Accolite.com. All rights reserved
+
+*
+
+* Created date :: Aug 1, 2016
+
+*
+
+*  @author :: Balaji P
+
+* ***************************************************************************
+
+*/
 package com.accolite.library.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.accolite.library.model.Employee;
+import com.accolite.library.model.LoggedUser;
 import com.accolite.library.service.EmployeeService;
 
 @Controller
@@ -35,6 +51,15 @@ public class EmployeeController {
 	@Autowired 
 	private Employee employee;
 	
+	@Autowired
+	private LoggedUser loggedUser;
+	
+	/**
+	 * Gets the employee.
+	 *
+	 * @param emailId the email id
+	 * @return the employee
+	 */
 	@RequestMapping(value = "/Employee",method=RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public Employee getEmployee(@RequestParam("emailId") String emailId){
@@ -55,5 +80,18 @@ public class EmployeeController {
 	public String deleteAdmin(@RequestParam("emailId") String emailId){
 		String status = employeeService.deleteAdmin(emailId);
 		return status;
+	}
+	
+	@RequestMapping(value = "/blacklist",method=RequestMethod.POST,produces="application/json")
+	@ResponseBody
+	public String login(@RequestParam("emailId") String emailId){
+		boolean adminFlag = loggedUser.isAdminFlag();
+		if(adminFlag){
+			
+			return "success";
+		}
+		else{
+			return "you donot have permissions";
+		}
 	}
 }
