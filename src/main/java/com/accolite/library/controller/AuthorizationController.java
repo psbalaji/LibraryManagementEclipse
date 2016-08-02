@@ -240,8 +240,16 @@ public class AuthorizationController {
 
 	@RequestMapping(value = "/Logout",method=RequestMethod.GET,produces="application/json")
 	@ResponseBody
-	public String logout(@RequestParam("emailId") String emailId){
-		
+	public String logout(@RequestParam("emailId") String emailId, HttpServletRequest request, HttpServletResponse response){
+		HttpSession session  =  request.getSession();
+		String sessionEmailId =  (String) session .getAttribute("emailId");
+		if(sessionEmailId != null){
+			session.invalidate();
+			return "success";	
+		}
+		else{
+			return "Login First";
+		}
 	}
 	
 }
