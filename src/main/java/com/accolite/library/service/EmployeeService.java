@@ -1,5 +1,9 @@
 package com.accolite.library.service;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +50,10 @@ public class EmployeeService {
 		}
 	}
 	
+	public boolean createUser(Employee employee){
+		return employeeDao.createUser(employee);
+	}
+	
 	public String deleteAdmin(String emailId){
 		long i = employeeDao.deleteAdmin(emailId);
 		if(i >= 0){
@@ -69,6 +77,27 @@ public class EmployeeService {
 		else{
 			return false;
 		}
+	}
+
+	public boolean createUserNormal(Employee employee) {
+		String password = employee.getPassword();
+		MessageDigest m;
+		try {
+			m = MessageDigest.getInstance("MD5");
+			m.reset();
+			m.update(password.getBytes());
+			byte[] digest = m.digest();
+			BigInteger bigInt = new BigInteger(1,digest);
+			String hashtext = bigInt.toString(16);
+			while(hashtext.length() < 32 ){
+			  hashtext = "0"+hashtext;
+			}
+			employee.setPassword(hashtext);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		
+		return employeeDao.createUser(employee);
 	}
 	
 	

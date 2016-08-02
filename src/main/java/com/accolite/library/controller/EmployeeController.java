@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.accolite.library.model.Employee;
 //import com.accolite.library.model.LoggedUser;
@@ -62,29 +64,45 @@ public class EmployeeController {
 	@RequestMapping(value = "/Employee",method=RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public Employee getEmployee(@RequestParam("emailId") String emailId){
+		//System.out.println(request);
 		System.out.println("emailId is: "+emailId);
 		return employeeService.getEmployee(emailId);
 	}
 	
 	@RequestMapping(value = "/Admin",method=RequestMethod.GET,produces="application/json")
 	@ResponseBody
-	public String addAdmin(@RequestParam("emailId") String emailId ){
-		System.out.println(emailId);
-		String status = employeeService.addAdmin(emailId);
-		return status;
+	public String addAdmin(@RequestParam("emailId") String emailId, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		boolean adminFlag = (Boolean) session.getAttribute("isAdmin");
+		
+		if(adminFlag){
+			String status = employeeService.addAdmin(emailId);
+			return status;
+		}
+		else{
+			return "you donot have permissions";
+		}
 	}
 	
 	@RequestMapping(value = "/Admin",method=RequestMethod.POST,produces="application/json")
 	@ResponseBody
-	public String deleteAdmin(@RequestParam("emailId") String emailId){
-		String status = employeeService.deleteAdmin(emailId);
-		return status;
+	public String deleteAdmin(@RequestParam("emailId") String emailId, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		boolean adminFlag = (Boolean) session.getAttribute("isAdmin");
+		if(adminFlag){
+			String status = employeeService.deleteAdmin(emailId);
+			return status;
+		}
+		else{
+			return "you donot have permissions";
+		}
 	}
 	
 	@RequestMapping(value = "/blacklist",method=RequestMethod.GET,produces="application/json")
 	@ResponseBody
-	public String blackList(@RequestParam("emailId") String emailId){
-		boolean adminFlag = true;
+	public String blackList(@RequestParam("emailId") String emailId, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		boolean adminFlag = (Boolean) session.getAttribute("isAdmin");
 		if(adminFlag){
 			boolean flag = employeeService.blackListEmployee(emailId);
 			if (flag)
@@ -99,8 +117,9 @@ public class EmployeeController {
 	
 	@RequestMapping(value = "/blacklist",method=RequestMethod.DELETE,produces="application/json")
 	@ResponseBody
-	public String removeBlackList(@RequestParam("emailId") String emailId){
-		boolean adminFlag = true;
+	public String removeBlackList(@RequestParam("emailId") String emailId, HttpServletRequest request){
+		HttpSession session = request.getSession(); 
+		boolean adminFlag = (Boolean) (session.getAttribute("isAdmin"));
 		if(adminFlag){
 			boolean flag = employeeService.removeBlackListEmployee(emailId);
 			if (flag)
