@@ -1,0 +1,10 @@
+<div ng-controller="namesCtrl">
+    <table>
+    <tr ng-repeat="x in responseData">
+   <td> {{ x.bookId }}</td>
+    <td> {{x.TitleId }}</td>
+    <td> {{x.TitleName }}</td>
+    <td><input ng-if '!x.allocated"' type="button" value="Request" ></td>
+  </tr>
+</table>
+</div>

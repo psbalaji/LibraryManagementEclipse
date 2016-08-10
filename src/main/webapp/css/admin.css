@@ -1,0 +1,138 @@
+#header{
+    position: relative;
+    left : 0px;
+}
+#main{
+    background-color: #0c1b24; 
+}
+
+#navdiv{
+    display:block;
+}
+
+#logo{
+    display: inline;
+    float: left;
+    width: 20%; 
+}
+
+#logo img{
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+#heading{
+    display: inline;
+    float : left;
+    width: 60%;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#heading p{
+    font-size: 48px;
+    margin: 0px;
+    font-family: helvetica, 'Times New Roman', Times, serif;
+    color: white;
+}
+
+#account{
+    display: inline;
+    float : left;
+    width: 15%;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+/* #navbar {
+    width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    font-family: helvetica, 'Times New Roman', Times, serif;
+}
+
+#navbar li {
+    float: left;
+}
+
+#navbar li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+#navbar li a:hover {
+    background-color: #111;
+}
+ */
+/* Dropdown Button */
+ .accountdropbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.accountdropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.accountdropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 9;
+}
+
+/* Links inside the dropdown */
+.accountdropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.accountdropdown-content button {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+
+/* Change color of dropdown links on hover */
+.accountdropdown-content a:hover {background-color: #f1f1f1}
+
+.accountdropdown-content button:hover {background-color: #f1f1f1}
+
+/* //Show the dropdown menu on hover */
+.accountdropdown:hover .accountdropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.accountdropdown:hover .accountdropbtn {
+    background-color: #3e8e41;
+}
+
+
+ 
+ 
+ 
+
+

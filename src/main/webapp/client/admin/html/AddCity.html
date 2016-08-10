@@ -1,0 +1,35 @@
+<div ng-controller="addCity">
+	<form class="form-horizontal" role="form">
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="authorName">City Name:</label>
+			<div class="col-sm-4">
+				<input type="text" id="authorName" ng-model="cityName" placeholder="City Name"
+					class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="authorName">State Name:</label>
+			<div class="col-sm-4">
+				<input type="text" id="authorName" ng-model="stateName" placeholder="State Name"
+					class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="authorName">Country Name:</label>
+			<div class="col-sm-4">
+				<input type="text" id="authorName" ng-model="countryName" placeholder="Country Name"
+					class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-4 col-sm-10">
+					<button class="btn btn-default" ng-click="insertCity()">Add City</button>
+			</div>
+		</div>
+	</form>
+	<div><center ng-bind="userMessage"></center></div>
+</div>
+
+
+
+

@@ -18,8 +18,17 @@ public class EmployeeService {
 	@Autowired
 	private EmployeeDao employeeDao;
 	
-	private Employee employee = null;
+	@Autowired
+	private Employee employee ;
 	
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
 	public EmployeeDao getEmployeeDao() {
 		return employeeDao;
 	}
@@ -33,16 +42,17 @@ public class EmployeeService {
 		
 		employee = employeeDao.getEmployee(emailId);
 		//System.out.println(employee.getEmailId());
+		System.out.println(employee.toString());
 		return employee;
 		
 	}
 	
 	public String addAdmin(String emailId){
-		boolean flag = employeeDao.addAdmin(emailId);
+		int flag = employeeDao.addAdmin(emailId);
 		
 		System.out.println(flag);
 		
-		if(flag){
+		if(flag >= 1 ){
 			return "success";
 		}
 		else{
@@ -56,7 +66,7 @@ public class EmployeeService {
 	
 	public String deleteAdmin(String emailId){
 		long i = employeeDao.deleteAdmin(emailId);
-		if(i >= 0){
+		if(i > 0){
 			return "success";
 		}
 		else{
@@ -65,7 +75,12 @@ public class EmployeeService {
 	}
 	
 	public boolean blackListEmployee(String emailId){
-		return employeeDao.blackListEmployee(emailId);
+		if(employeeDao.blackListEmployee(emailId) >= 1 ){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	public boolean removeBlackListEmployee(String emailId) {
@@ -79,25 +94,41 @@ public class EmployeeService {
 		}
 	}
 
-	public boolean createUserNormal(Employee employee) {
-		String password = employee.getPassword();
-		MessageDigest m;
-		try {
-			m = MessageDigest.getInstance("MD5");
-			m.reset();
-			m.update(password.getBytes());
-			byte[] digest = m.digest();
-			BigInteger bigInt = new BigInteger(1,digest);
-			String hashtext = bigInt.toString(16);
-			while(hashtext.length() < 32 ){
-			  hashtext = "0"+hashtext;
+	public boolean updateUser(Employee employee) {
+		if(employee.getPassword() != null){
+			String password = employee.getPassword();
+			MessageDigest m;
+			try {
+				m = MessageDigest.getInstance("MD5");
+				m.reset();
+				m.update(password.getBytes());
+				byte[] digest = m.digest();
+				BigInteger bigInt = new BigInteger(1,digest);
+				String hashtext = bigInt.toString(16);
+				while(hashtext.length() < 32 ){
+				  hashtext = "0"+hashtext;
+				}
+				
+				System.out.println(hashtext);
+				employee.setPassword(hashtext);
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
 			}
-			employee.setPassword(hashtext);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
 		}
+		int i = employeeDao.updateUser(employee); 
+		if(i > 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public String addCity(String cityName, String stateName, String country) {
 		
-		return employeeDao.createUser(employee);
+		String message = employeeDao.addCity(cityName, stateName, country);
+		
+		return message;
 	}
 	
 	

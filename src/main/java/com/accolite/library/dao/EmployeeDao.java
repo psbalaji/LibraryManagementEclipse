@@ -39,6 +39,17 @@ public class EmployeeDao {
 	/** The jdbc template. */
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private Employee employee;
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
 
 	/**
 	 * Gets the jdbc template.
@@ -63,7 +74,7 @@ public class EmployeeDao {
 
 		// SQL query to inset values into the LibraryUser table which contains
 		// all the employee details
-		String sql = "insert into LibraryUser(emailId, employeeId, googleId, firstName, middleName, lastName, ManagerId, MobileNo, cityId, password) values(?,?,?,?,?,?,?,?,?,?)";
+		String sql = "insert into libraryUser(emailId, employeeId, googleId, firstName, middleName, lastName, ManagerId, MobileNo, cityId, password, roleId, blackListed) values(?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		return jdbcTemplate.execute(sql, new PreparedStatementCallback<Boolean>() {
 
@@ -77,8 +88,14 @@ public class EmployeeDao {
 				ps.setString(6, employee.getLastName());
 				ps.setString(7, employee.getManagerId());
 				ps.setString(8, employee.getMobileNo());
-				ps.setString(9, employee.getCityId());
+				if (employee.getCityId() > 0) {
+					ps.setInt(9, employee.getCityId());
+				} else {
+					ps.setString(9, null);
+				}
 				ps.setString(10, employee.getPassword());
+				ps.setInt(11, employee.getRoleId());
+				ps.setInt(12, employee.getBlackListed());
 
 				return ps.execute();
 			}
@@ -90,38 +107,52 @@ public class EmployeeDao {
 	 * Updates an employee details
 	 */
 	public int updateUser(Employee employee) {
-		String sql = "update LibraryUser set employeeid = ?, googleId = ?, firstName = ?, middleName = ?, lastName = ?, ManagerId = ?, MobileNo = ?, cityId = ?, password = ?  where emailId = ?";
+		if (employee.getPassword() == null) {
+			String sql = "update LibraryUser set employeeid = ?, googleId = ?, firstName = ?, middleName = ?, lastName = ?, ManagerId = ?, MobileNo = ?, cityId = ?  where emailId = ?";
 
-		return jdbcTemplate.update(sql, employee.getEmployeeId(), employee.getGoogleId(), employee.getFirstName(),
-				employee.getMiddleName(), employee.getLastName(), employee.getManagerId(), employee.getMobileNo(),
-				employee.getCityId(), employee.getPassword(), employee.getEmailId());
+			return jdbcTemplate.update(sql, employee.getEmployeeId(), employee.getGoogleId(), employee.getFirstName(),
+					employee.getMiddleName(), employee.getLastName(), employee.getManagerId(), employee.getMobileNo(),
+					employee.getCityId(), employee.getEmailId());
+		}
+		else{
+			String sql = "update LibraryUser set employeeid = ?, googleId = ?, firstName = ?, middleName = ?, lastName = ?, ManagerId = ?, MobileNo = ?, cityId = ?, password=?  where emailId = ?";
+
+			return jdbcTemplate.update(sql, employee.getEmployeeId(), employee.getGoogleId(), employee.getFirstName(),
+					employee.getMiddleName(), employee.getLastName(), employee.getManagerId(), employee.getMobileNo(),
+					employee.getCityId(), employee.getPassword(),employee.getEmailId());
+		}
 	}
-	
-	
+
 	/*
 	 * Gives the details of the Employee by taking emailId as argument.
 	 */
-	public Employee getEmployee(final String emailId){
-		
+	public Employee getEmployee(final String emailId) {
+
 		System.out.println(jdbcTemplate);
-		
-		String sql = "select * from LibraryUser where emailId = ?" ;
-		
-		return jdbcTemplate.query(sql, new PreparedStatementSetter(){
+
+		String sql = "select * from LibraryUser where emailId = ?";
+
+		return jdbcTemplate.query(sql, new PreparedStatementSetter() {
 
 			public void setValues(PreparedStatement ps) throws SQLException {
 				ps.setString(1, emailId);
-				
-			}
-			
-		},new ResultSetExtractor<Employee>(){
 
-			/* (non-Javadoc)
-			 * @see org.springframework.jdbc.core.ResultSetExtractor#extractData(java.sql.ResultSet)
+			}
+
+		}, new ResultSetExtractor<Employee>() {
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * org.springframework.jdbc.core.ResultSetExtractor#extractData(java
+			 * .sql.ResultSet)
 			 */
 			public Employee extractData(ResultSet rs) throws SQLException, DataAccessException {
-				Employee employee = new Employee();
-				while(rs.next()){
+				//Employee employee = null;
+				while (rs.next()) {
+					employee = new Employee();
+					System.out.println("in rs next");
 					employee.setEmailId(rs.getString("emailId"));
 					employee.setEmployeeId(rs.getString("employeeId"));
 					employee.setGoogleId(rs.getString("googleId"));
@@ -130,112 +161,149 @@ public class EmployeeDao {
 					employee.setLastName(rs.getString("lastName"));
 					employee.setManagerId(rs.getString("ManagerId"));
 					employee.setMobileNo(rs.getString("MobileNo"));
-					employee.setCityId(rs.getString("cityId"));
+					employee.setCityId(rs.getInt("cityId"));
 					employee.setPassword(rs.getString("password"));
+					employee.setRoleId(rs.getInt("roleId"));
+					employee.setBlackListed(rs.getInt("blackListed"));
 				}
 				return employee;
 			}
-			
+
 		});
 	}
-	
-	
+
 	/*
 	 * Adding an Employee to the BlackList
 	 */
-	public boolean blackListEmployee(final String emailId){
-		String sql = "insert into blackListEmployee (emailId) values(?)";
-		
-		return jdbcTemplate.execute(sql, new PreparedStatementCallback<Boolean>(){
+	public int blackListEmployee(final String emailId) {
+		System.out.println(emailId);
+		String sql = "update libraryUser set blackListed = 1  where emailId = ? and roleId != 2";
 
-			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-				ps.setString(1, emailId);
-				return ps.execute();
-			}
-			
-		});
-	}
-	
-	/*
-	 * Removing an employee from BlackList 
-	 */
-	public int removeBlackListEmployee(final String emailId){
-		String sql = "delete from blackListEmployee where emailId = ?";
-		
-		return jdbcTemplate.update(sql,emailId);
+		return jdbcTemplate.update(sql, emailId);
 	}
 
-	/*
-	 * Function that returns the emailId if it is present else returns null String 
-	 */
-	public String isAdmin(final String emailId){
-		String sql = "use Library select emailId from admins where emailId = ?" ;
-		
-		return jdbcTemplate.query(sql, new PreparedStatementSetter(){
+	public boolean isBlackListedEmployee(final String emailId) {
+		String sql = "select blackListed  from libraryUser where emailId = ?";
+
+		return jdbcTemplate.query(sql, new PreparedStatementSetter() {
 
 			public void setValues(PreparedStatement ps) throws SQLException {
 				ps.setString(1, emailId);
-				
-			}
-			
-		},new ResultSetExtractor<String>(){
 
-			/* (non-Javadoc)
-			 * @see org.springframework.jdbc.core.ResultSetExtractor#extractData(java.sql.ResultSet)
+			}
+
+		}, new ResultSetExtractor<Boolean>() {
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * org.springframework.jdbc.core.ResultSetExtractor#extractData(java
+			 * .sql.ResultSet)
+			 */
+			public Boolean extractData(ResultSet rs) throws SQLException, DataAccessException {
+				int isBlacklisted = 0;
+				while (rs.next()) {
+					isBlacklisted = rs.getInt(1);
+				}
+
+				if (isBlacklisted == 0) {
+					return false;
+				}
+
+				else {
+					return true;
+				}
+			}
+
+		});
+	}
+
+	/*
+	 * Removing an employee from BlackList
+	 */
+	public int removeBlackListEmployee(final String emailId) {
+		String sql = "update libraryUser set blackListed = 0  where emailId = ?";
+		return jdbcTemplate.update(sql, emailId);
+	}
+
+	/*
+	 * Function that returns the emailId if it is present else returns null
+	 * String
+	 */
+	public String isAdmin(final String emailId) {
+		String sql = "use Library select roleId, emailId from libraryUser where emailId = ?";
+
+		return jdbcTemplate.query(sql, new PreparedStatementSetter() {
+
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setString(1, emailId);
+
+			}
+
+		}, new ResultSetExtractor<String>() {
+
+			/*
+			 * (non-Javadoc)
+			 * 
+			 * @see
+			 * org.springframework.jdbc.core.ResultSetExtractor#extractData(java
+			 * .sql.ResultSet)
 			 */
 			public String extractData(ResultSet rs) throws SQLException, DataAccessException {
 				String emailId = null;
-				while(rs.next()){
+				int roleId = 0;
+				while (rs.next()) {
+					roleId = rs.getInt(1);
 					emailId = rs.getString("emailId");
 				}
-				return emailId;
+
+				if (roleId == 2) // id for admin
+					return emailId;
+				else
+					return null;
 			}
-			
+
 		});
 	}
-	
-	public boolean addAdmin(final String emailId){
-		String duplicateEmailId = null;
-		System.out.println(emailId);
-		duplicateEmailId = isAdmin(emailId);
-		
-		/*
-		 * Checking if the user is already present in the database
-		 */
-		if(duplicateEmailId != null){
-			if(duplicateEmailId.equalsIgnoreCase(emailId)){
-				return true;
-			}
-		}
-		
-		
-		/*
-		 * Adding the user to the admins database.
-		 */
-		
-			String sql = "insert into admins (emailId) values(?)";
-			
-			return jdbcTemplate.execute(sql, new PreparedStatementCallback<Boolean>() {
 
-				public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-					ps.setString(1, emailId);
-					ps.execute();
-					return true; 
-				}			
-			});
-		
+	public int addAdmin(final String emailId) {
+		String sql = "update libraryUser set roleId = 2  where emailId = ?";
+
+		return jdbcTemplate.update(sql, emailId);
+
 	}
-	
-	
+
 	/*
 	 * Removing an admin from the admins table.
 	 */
-	public int deleteAdmin(String emailId){
-		String sql = "delete from admins where emailId = ?" ;
-		
-		return jdbcTemplate.update(sql,emailId);
+	public int deleteAdmin(String emailId) {
+		String sql = "update libraryUser set roleId = 1  where emailId = ?";
+
+		return jdbcTemplate.update(sql, emailId);
 	}
 
+	public String addCity(final String cityName, final String stateName, final String country) {
+		// TODO Auto-generated method stub
 
-	
+		String sql = "insert into city (cityName, stateName, countryName) values (?,?,?)";
+
+		return jdbcTemplate.execute(sql, new PreparedStatementCallback<String>() {
+
+			public String doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+				ps.setString(1, cityName);
+				ps.setString(2, stateName);
+				ps.setString(3, country);
+				try {
+					ps.execute();
+					return "success";
+				} catch (Exception e) {
+					e.printStackTrace();
+					return "failure";
+				}
+
+			}
+		});
+	}
+
 }

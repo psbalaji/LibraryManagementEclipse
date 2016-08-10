@@ -1,0 +1,25 @@
+<div ng-controller="resourceRequestController">
+	<div class="col-sm-offset-2 col-sm-8">
+		<table class="table">
+			<tr>
+				<th>Transaction ID</th>
+				<th>Title ID</th>
+				<th>Title Name</th>
+				<th>EmailId</th>
+				<th>Approve</th>
+				<th>Reject</th>
+			</tr>
+			<tr ng-repeat="x in data">
+				<td>{{x.transactionId}}</td>
+				<td>{{x.titleId }}</td>
+				<td>{{x.titleName }}</td>
+				<td>{{x.emailId}}</td>
+				<td><input type="button" value="Approve"
+					ng-click="accept(x.transactionId,x.titleId)"></td>
+				<td><input type="button" value="Reject"
+					ng-click="reject(x.transactionId)"></td>
+			</tr>
+		</table>
+	</div>
+	
+</div>

@@ -1,0 +1,125 @@
+<!-- <style>
+#searchBar {
+	height: 40px;
+	width: 400px;
+	top: 40px;
+	position: relative;
+}
+</style>
+<div ng-controller="namesCtrl">
+	<form>
+		<center>
+			<input ng-model="Name" type="text" id="searchBar" name="location"
+				ng-change="loc=locationName" placeholder="Keyword" />
+		</center>
+		<center>
+			<div id="account" style="float: right;">
+				<div class="dropdown">
+					<button class="dropbtn">Search By</button>
+					<div class="dropdown-content">
+						<a href="" ng-click="getBookTopic()">Topic</a> <a href=""
+							ng-click="getBookLocation()">Location</a> <a href=""
+							ng-click="getBookTitle()">Title</a>
+					</div>
+				</div>
+			</div>
+		</center>
+
+	</form>
+
+	<table>
+		<tr>
+			<th>Title Id</th>
+			<th>Title Name</th>
+			<th>Request</th>
+		</tr>
+		<tr ng-repeat="x in data">
+			<td>{{x.titleId }}</td>
+			<td>{{x.titleName }}</td>
+			<td><input ng-if="!x.allocated" type="button" value="Request"
+				ng-click="update(x.titleId)">
+				<div ng-if="x.allocated">
+					<input type="button" value="Pre-Request"
+						ng-click="update(x.titleId)">Title not available at the
+					moment</input>
+				</div></td>
+		</tr>
+	</table>
+</div> 
+
+-->
+<style>
+#searchBar {
+	height: 40px;
+	width: 400px;
+	top: 40px;
+	position: relative;
+}
+</style>
+<div ng-controller="namesCtrl">
+	<form class="form-horizontal" role="form">
+		<div class="form-group">
+			<div class="col-sm-offset-4 col-sm-4">
+				<input type="text" id="authorName" ng-model="Name"
+					placeholder="Keywords" class="form-control"></input>
+			</div>
+		</div>
+	</form>
+	<div class="dropdown col-sm-offset-5 col-sm-2">
+		<button class="btn btn-primary dropdown-toggle" type="button"
+			data-toggle="dropdown">
+			Search By <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><a href="" ng-click="getBookTopic()">Topic</a></li>
+			<li><a href="" ng-click="getBookLocation()">Location</a></li>
+			<li><a href="" ng-click="getBookTitle()">Title</a></li>
+		</ul>
+	</div>
+
+	
+
+	<div class="col-sm-offset-1 col-sm-10">
+		<table class="table">
+			<thead>
+				<tr>
+					<th class="col-sm-2">TitleId</th>
+					<th class="col-sm-2">TitleName</th>
+					<th class="col-sm-2">Request</th>
+					<th class="col-sm-2">Suggest</th>
+				</tr>
+				<tr ng-repeat="x in data">
+					<td class="col-sm-2">{{x.titleId }}</td>
+					<td class="col-sm-2">{{x.titleName }}</td>
+					<td class="col-sm-2"><input ng-if="!x.allocated" type="button"
+						value="Request" ng-click="update(x.titleId)">
+						<div ng-if="x.allocated">
+							<input type="button" value="Pre-Request"
+								ng-click="update(x.titleId)">Title not available at the
+							moment</input>
+						</div></td>
+					<td><div class="form-group" ng-if="!suggestClicked">
+							<div>
+								<button class="btn btn-default" ng-click="suggest(x.titleName)">Suggest</button>
+							</div>
+						</div>
+						<div class="form-group" ng-if="suggestClicked">
+							<div>
+								<input type="text" class="col-sm-7" id="resourceType"
+									ng-model="friendEmailId" placeholder="Enter Emailid"
+									class="form-control"></input>
+								<button class="btn btn-default col-sm-offset-1 col-sm-3"
+									ng-click="suggestFriend(friendEmailId)">OK</button>
+							</div>
+						</div></td>
+				</tr>
+			</thead>
+			<tbody>
+		</table>
+		<center ng-bind="userMessage"></center>
+	</div>
+</div>
+
+
+</div>
+

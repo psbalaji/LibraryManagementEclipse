@@ -1,0 +1,37 @@
+
+
+
+<div ng-controller="addTitle">
+	<form class="form-horizontal" role="form">
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="title">Title:</label>
+			<div class="col-sm-6">
+				<input type="text" ng-model="title" placeholder="Title Name" id="title" class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="author">Author:</label>
+			<div class="col-sm-6">
+				<select ng-model="authorId" id="author" class="form-control">
+					<option ng-selected="{{author.authorId == authorId}}"
+						ng-repeat="author in authors" value="{{author.authorId}}">{{author.authorName}}</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="city">Topic:</label>
+			<div class="col-sm-6">
+				<select ng-model="topicId" id="city" class="form-control">
+					<option ng-selected="{{topic.topicId == topicId}}"
+						ng-repeat="topic in topics" value="{{topic.topicId}}">{{topic.topicName}}</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button class="btn btn-default" ng-click="insertTitle()">Add Title</button>
+			</div>
+		</div>
+	</form>
+	<div><center ng-bind="userMessage"></center></div>
+</div>

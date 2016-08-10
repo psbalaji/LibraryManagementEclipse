@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="library">
+<head>
+<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="client/assets/index.css">
+<meta name="google-signin-client_id"
+	content="999739768442-0rctm8u0igcqtr96dppr2ftur64jhp18.apps.googleusercontent.com">
+<script
+	src="bower_components/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+<script
+	src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+	<div id="header">
+		<div id="main">
+			<div id="logo">
+				<img src="images/main-logo.jpg"></img>
+			</div>
+			<div id="heading">
+				<p>Accolite Library</p>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+	</div>
+
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script
+		src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+	<script src="client/assets/js/googleSignIn.js"></script>
+	<script src="node_modules/ng-google-signin/src/ng-google-signin.js"></script>
+
+	<script src="client/app.module.js"></script>
+	<script src="client/app.controller.js"></script>
+	<script src="client/app.js"></script>
+	<script src="client/app.directive.js"></script>
+
+	<div ng-view></div>
+
+</body>
+
+</html>

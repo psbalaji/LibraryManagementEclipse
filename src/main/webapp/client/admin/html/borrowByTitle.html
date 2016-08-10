@@ -1,0 +1,41 @@
+<div ng-controller="borrowedbytitleCtrl">
+ 
+  <form class="form-horizontal" role="form">
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="resourceType">Title Name:</label>
+			<div class="col-sm-4">
+				<input type="text" id="resourceType" ng-model="TitleName"
+					placeholder="Title Name" class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-4 col-sm-10">
+				<button class="btn btn-default" ng-click="borrowedbytitle();">Search</button>
+			</div>
+		</div>
+	</form>
+ 
+ <div class="col-sm-offset-2 col-sm-8">
+		<table class="table" style="text-align:center;">
+			<thead>
+				<tr>
+					<th class="col-sm-2">TitleName</th>
+					<th class="col-sm-2">FirstName</th>
+					<th class="col-sm-2">EmailId</th>
+					<th class="col-sm-2">TransactionId</th>
+					<th class="col-sm-2">ResourceId</th>
+					<th class="col-sm-2">Status</th>
+				</tr>
+				<tr ng-repeat="x in data">
+					<td class="col-sm-2">{{x.titleName }}</td>
+					<td class="col-sm-2">{{x.name }}</td>
+					<td class="col-sm-2">{{x.emailId }}</td>
+					<td class="col-sm-2">{{x.transactionId }}</td>
+					<td class="col-sm-2">{{x.resourceId }}</td>
+					<td class="col-sm-2">{{x.status }}</td>
+				</tr>
+			</thead>
+			<tbody>
+		</table>
+	</div>
+</div>

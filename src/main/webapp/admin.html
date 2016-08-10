@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html ng-app="Admin">
+<head>
+<link rel="stylesheet" href="css/admin.css">
+<meta name="google-signin-client_id"
+	content="999739768442-0rctm8u0igcqtr96dppr2ftur64jhp18.apps.googleusercontent.com">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async
+	defer></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+	var backupAuth2;
+
+	function onLoad() {
+		gapi.load('auth2', function() {
+			gapi.auth2.init();
+		});
+	}
+
+	function signOut() {
+		var auth2 = gapi.auth2.getAuthInstance();
+		/* if (typeof auth2 == 'undefined') {
+			console.log(backupAuth2);
+			auth2 = backupAuth2;
+		} else {
+			auth2 = gapi.auth2.getAuthInstance();
+		} */
+		console.log(auth2);
+		auth2.signOut().then(function() {
+			var email = auth2.currentUser.get().getBasicProfile().getEmail();
+			console.log(email);
+			invalidateServerSession(email);
+			console.log('User signed out.');
+		});
+	}
+
+	function getNewXmlHttp() {
+		var xmlhttp;
+		if (window.XMLHttpRequest) {
+			xmlhttp = new XMLHttpRequest();
+		} else {
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		return xmlhttp;
+	}
+
+	function invalidateServerSession(emailId) {
+
+		var xmlhttp = getNewXmlHttp();
+
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				var text = xmlhttp.responseText;
+				location.href = "index.html";
+			}
+		}
+
+		xmlhttp.open("GET",
+				"http://localhost:8080/libraryManagement/api/Logout?emailId="
+						+ emailId, true);
+
+		//xmlhttp.setRequestHeader("Content-type", "text/plain");
+		//xmlhttp.setRequestHeader("Accept", "text/plain");
+
+		// var queryParams = "uid=1" + "&content=" + message; 
+		xmlhttp.send();
+
+	}
+</script>
+</head>
+
+<body ng-controller="adminController">
+	<div id="header">
+		<div id="main">
+			<div id="logo">
+				<img src="images/main-logo.jpg"></img>
+			</div>
+			<div id="heading">
+				<p>Accolite Library</p>
+			</div>
+			<div id="account">
+				<div class="accountdropdown">
+					<button class="accountdropbtn">account</button>
+					<div class="accountdropdown-content">
+						<a href="#updateAccount">Update Account</a> <a href=""
+							onclick="signOut()">Logout</a>
+					</div>
+				</div>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+	</div>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<ul class="nav navbar-nav">
+				<li><a href="#search">Search</a></li>
+				<li><a href="#return">Return</a></li>
+				<li><a href="#resourceRequests">Resource Requests</a></li>
+				<li class="dropdown"><a href="" data-toggle="dropdown"
+					class="dropdown-toggle">Add<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#addAdmin">Add Admin</a></li>
+						<li class="divider"></li>
+						<li><a href="#addResourceType">Add Resource Type</a></li>
+						<li><a href="#addTopic">Add Topic</a></li>
+						<li><a href="#addAuthor">Add Author</a></li>
+						<li><a href="#addTitle">Add Title</a></li>
+						<li><a href="#addResource">Add Resource</a></li>
+						<li class="divider"></li>
+						<li><a href="#addCity">Add City</a></li>
+					</ul></li>
+				<li class="dropdown"><a href="" data-toggle="dropdown"
+					class="dropdown-toggle">Remove<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#removeAdmin">Remove Admin</a></li>
+						<li><a href="#removeResource">Remove Resource</a></li>
+					</ul></li>
+				<li class="dropdown"><a href="" data-toggle="dropdown"
+					class="dropdown-toggle">Blacklist<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#addBlacklist">Add to Blacklist</a></li>
+						<li><a href="#removeBlacklist">Remove Blacklist</a></li>
+					</ul></li>
+				<li class="dropdown"><a href="" data-toggle="dropdown"
+					class="dropdown-toggle">Summary<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#sumByLocation">Summary By Location</a></li>
+						<li><a href="#sumByTopic">Summary By Topic</a></li>
+<!-- 						<li><a href="#bod">Books on Demand</a></li> -->
+					</ul></li>
+				<li class="dropdown"><a href="" data-toggle="dropdown"
+					class="dropdown-toggle">Borrow List<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#borrowByLocation">Borrow By Location</a></li>
+						<!-- 						<li><a href="#borrowByDate">Borrow By Date</a></li> -->
+						<li><a href="#borrowByTitle">Borrow By Title</a></li>
+					</ul></li>
+<!-- 				<li><a href="#review">Review</a></li> -->
+			</ul>
+		</div>
+	</nav>
+
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script
+		src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+	<script src="client/assets/js/googleSignIn.js"></script>
+	<script src="node_modules/ng-google-signin/src/ng-google-signin.js"></script>
+
+
+
+
+
+	<script src="client/admin/app.module.js"></script>
+	<script src="client/admin/app.js"></script>
+	<script src="client/admin/app.service.js"></script>
+	<script src="client/admin/app.controller.js"></script>
+
+	<div ng-view></div>
+
+</body>
+
+</html>

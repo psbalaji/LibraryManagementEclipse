@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html ng-app="user">
+
+<head>
+<link rel="stylesheet" href="css/user.css">
+<meta name="google-signin-client_id"
+	content="999739768442-0rctm8u0igcqtr96dppr2ftur64jhp18.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async
+	defer></script>
+<script>
+	function onLoad() {
+		gapi.load('auth2', function() {
+			gapi.auth2.init();
+		});
+	}
+
+	function signOut() {
+		var auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut().then(function() {
+			var email = auth2.currentUser.get().getBasicProfile().getEmail();
+			console.log(email);
+			invalidateServerSession(email);
+			console.log('User signed out.');
+		});
+	}
+
+	function getNewXmlHttp() {
+		var xmlhttp;
+		if (window.XMLHttpRequest) {
+			xmlhttp = new XMLHttpRequest();
+		} else {
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		return xmlhttp;
+	}
+
+	function invalidateServerSession(emailId) {
+		
+		var xmlhttp = getNewXmlHttp();
+
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				var text = xmlhttp.responseText;
+				console.log("hello");
+				alert(text);
+			}
+		}
+
+		xmlhttp.open("GET",
+				"http://localhost:8080/libraryManagement/api/Logout?emailId="+emailId, true);
+
+		//xmlhttp.setRequestHeader("Content-type", "text/plain");
+		//xmlhttp.setRequestHeader("Accept", "text/plain");
+
+		// var queryParams = "uid=1" + "&content=" + message; 
+		xmlhttp.send();
+
+	}
+</script>
+</head>
+
+<body>
+	<div id="header">
+		<div id="main">
+			<div id="logo">
+				<img src="images/main-logo.jpg"></img>
+			</div>
+			<div id="heading">
+				<p>Accolite Library</p>
+			</div>
+			<div id="account">
+				<div class="dropdown">
+					<button class="dropbtn">account</button>
+					<div class="dropdown-content">
+						<a href="#">Update Account</a> <a href="" onclick="signOut()">Logout</a>
+					</div>
+				</div>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+	</div>
+
+
+
+	<ul id="navbar">
+		<li><a href="#search">Search</a></li>
+		<li><a href="#request">Request</a></li>
+		<li><a href="#return">Return</a></li>
+	</ul>
+
+
+
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script
+		src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+	<script src="client/assets/js/googleSignIn.js"></script>
+	<script src="node_modules/ng-google-signin/src/ng-google-signin.js"></script>
+
+	<script src="client/user/app.module.js"></script>
+	<script src="client/user/app.controller.js"></script>
+
+	<div ng-view></div>
+	<div id="footer">
+		<div class="copyright">&copy All rights reserved 2016. Accolite,
+			Inc.</div>
+	</div>
+</body>
+
+</html>

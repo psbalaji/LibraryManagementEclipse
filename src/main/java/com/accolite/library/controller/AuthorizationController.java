@@ -16,10 +16,12 @@
 package com.accolite.library.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.ws.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,9 +30,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.accolite.library.model.City;
 import com.accolite.library.model.Employee;
+import com.accolite.library.model.UserMessage;
 import com.accolite.library.service.AuthorizationService;
 import com.accolite.library.service.EmployeeService;
+import com.fasterxml.jackson.core.sym.Name;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -51,6 +56,11 @@ public class AuthorizationController {
 	@Autowired
 	private Employee employee; 
 	
+	@Autowired
+	private UserMessage userMessage;
+	
+	@Autowired
+	private City city;
 
 	/**
 	 * Gets the authorization service.
@@ -119,72 +129,83 @@ public class AuthorizationController {
 	@ResponseBody
 	public String googleLogIn(@RequestParam("emailId") String emailId, @RequestParam("googleId") String googleId,@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, HttpServletRequest request, HttpServletResponse response){
 		String message = authorizationService.googleLogin(emailId);
+		System.out.println(message);
 		if(message.equals("data")){
 			employee.setEmailId(emailId);
 			employee.setGoogleId(googleId);
 			employee.setFirstName(firstName);
 			employee.setLastName(lastName);
+			employee.setRoleId(1);
+			employee.setBlackListed(0);
 			employeeService.createUser(employee);
 			HttpSession session = request.getSession();
 			session.setAttribute("user", emailId);
 			session.setAttribute("isAdmin", false);
-			try {
+			/*try {
 				response.sendRedirect(null); //redirect to normal user page
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-			return "success";
+			}*/
+			return "normal";
 		}
 		else if (message.equals("admin")) {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", emailId);
 			session.setAttribute("isAdmin", true);
-			try {
+			/*try {
 				response.sendRedirect(null); //Redirect to admin page
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-			return "success";
+			}*/
+			return "admin";
 		}
 		else if (message.equals("user")) {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", emailId);
 			session.setAttribute("isAdmin", false);
-			try {
-				response.sendRedirect(null);
+			/*try {
+				response.sendRedirect("http://localhost:8081/libraryManagement/home.html");
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-			return "success";
+			}*/
+			return "normal";
 		}
 		else{
 			return "failure";
 		}
 	}
 	
-	@RequestMapping(value = "/GoogleRegister",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(value = "/getCity",method=RequestMethod.GET,produces="application/json")
+	@ResponseBody
+	public ArrayList<City> getCity(){
+		ArrayList<City> cities = new ArrayList<City>();
+		cities = authorizationService.getCities();
+		System.out.println("hit made");
+		return cities;
+	}
+	
+	/*@RequestMapping(value = "/GoogleRegister",method=RequestMethod.GET,produces="application/json")
 	@ResponseBody
 	public String googleRegister(@RequestParam("emailId") String emailId, @RequestParam("googleId") String googleId,@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, HttpServletRequest request, HttpServletResponse response){
 		employee.setEmailId(emailId);
 		employee.setGoogleId(googleId);
 		employee.setFirstName(firstName);
 		employee.setLastName(lastName);
+		System.out.println(emailId)	;
 		boolean status = employeeService.createUser(employee);
-		if(status){
+		System.out.println(status);
+		
 			try {
-				response.sendRedirect(null); //redirect to login page
+				response.sendRedirect("index.html"); //redirect to login page
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			return "success";
-		}
-		else
-			return "failure";
-	}
+	}*/
 	
-	@RequestMapping(value = "/Register",method=RequestMethod.GET,produces="application/json")
+	/*@RequestMapping(value = "/Register",method=RequestMethod.GET,produces="application/json")
 	@ResponseBody
-	public String register(@RequestParam("emailId") String emailId, @RequestParam("employeeId") String empId,@RequestParam("googleId") String googleId,@RequestParam("firstName") String firstName, @RequestParam("middleName") String middleName,@RequestParam("lastName") String lastName, @RequestParam("managerId") String managerId, @RequestParam("mobileNo") String mobileNo, @RequestParam("cityId") String cityId, @RequestParam("password") String password){
+	public String register(@RequestParam("emailId") String emailId, @RequestParam("employeeId") String empId,@RequestParam("googleId") String googleId,@RequestParam("firstName") String firstName, @RequestParam("middleName") String middleName,@RequestParam("lastName") String lastName, @RequestParam("managerId") String managerId, @RequestParam("mobileNo") String mobileNo, @RequestParam("cityId") String cityId, @RequestParam("password") String password, HttpServletResponse response){
 		employee.setEmailId(emailId);
 		employee.setEmployeeId(empId);
 		employee.setGoogleId(googleId);
@@ -195,46 +216,55 @@ public class AuthorizationController {
 		employee.setMobileNo(mobileNo);
 		employee.setCityId(cityId);
 		employee.setPassword(password);
+		employee.setRoleId(1);
+		employee.setBlackListed(0);
 		
 		boolean status = employeeService.createUserNormal(employee);
+		try {
+			response.sendRedirect("index.html");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "success";
 		
-		if(status){
-			return "success";
-		}
-		else{
-			return "failure";
-		}
-	}
+	}*/
 	
-	@RequestMapping(value = "/Login",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(value = "/Login",method=RequestMethod.POST,produces="application/json")
 	@ResponseBody
-	public String login(@RequestParam("emailId") String emailId, @RequestParam("password") String password, HttpServletRequest request, HttpServletResponse response){
+	public UserMessage login(@RequestParam("emailId") String emailId, @RequestParam("password") String password, HttpServletRequest request){
+		System.out.println("hello in login");
+		System.out.println("email: "+emailId+" password: "+password);
+		
 		String status = authorizationService.login(emailId,password);
+		System.out.println(status);
 		if(status.equals("user")){
 			try {
 				HttpSession session = request.getSession();
 				session.setAttribute("user", emailId);
-				session.setAttribute("isAdmin", false);
-				response.sendRedirect(null); //redirect to normal user page 
-			} catch (IOException e) {
+				session.setAttribute("isAdmin", false); 
+			} catch (Exception e) {
 				
 				e.printStackTrace();
 			}
-			return "success";
+			userMessage.setMessage("normal");
+			return userMessage;
 		}
 		else if (status.equals("admin")) {
 			try {
 				HttpSession session = request.getSession();
 				session.setAttribute("user", emailId);
 				session.setAttribute("isAdmin", true);
-				response.sendRedirect(null); //redirect to admin page
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return "success";
+			userMessage.setMessage("admin");
+			return userMessage;
 		}
 		else{
-			return "Invalid Credentials";
+			System.out.println("invalid cred");
+			userMessage.setMessage("Invalid Credentials");
+			return userMessage;
 		}
 	}
 
@@ -242,7 +272,8 @@ public class AuthorizationController {
 	@ResponseBody
 	public String logout(@RequestParam("emailId") String emailId, HttpServletRequest request, HttpServletResponse response){
 		HttpSession session  =  request.getSession();
-		String sessionEmailId =  (String) session .getAttribute("emailId");
+		String sessionEmailId =  (String) session .getAttribute("user");
+		System.out.println(sessionEmailId);
 		if(sessionEmailId != null){
 			session.invalidate();
 			return "success";	

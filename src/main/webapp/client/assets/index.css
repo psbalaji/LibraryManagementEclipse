@@ -1,0 +1,86 @@
+#navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    background-color: #f1f1f1;
+    border: 1px solid #555;
+}
+
+#navbar li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+#navbar li {
+    text-align: center;
+    border-bottom: 1px solid #555;
+}
+
+#navbar li:last-child {
+    border-bottom: none;
+}
+
+#navbar li a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#navbar li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+
+#login{
+	margin: 0 auto;
+
+	margin-top: 150px;
+	
+	align: center;
+	
+	border-style:solid;
+	border-width:1px;
+	
+	width:55%;
+	height:300px;
+	
+	font-family:"Helvetica","Times New Roman", Times, serif;
+}
+
+
+/*
+normal login div
+*/
+#normal{
+	float: left;
+	width: 70%;
+}
+
+
+/*
+sign in with google div
+*/
+#google{
+	float: left;
+	width: 30%;
+}
+
+
+/*
+class for text box, includes email text box and password textbox
+*/
+.box{
+	width:40% ;
+	height: 30px;
+}
+
+#login #normal>p{
+	font-size:24px;
+}
+
+#loginForm {
+	
+}

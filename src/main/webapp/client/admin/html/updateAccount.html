@@ -1,0 +1,73 @@
+<div ng-controller="namesCtrl">
+	<form class="form-horizontal" role="form">
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="resourceType">Email:</label>
+			<div class="col-sm-4">
+				<input type="text" id="resourceType" ng-model="employeeData.emailId"
+					placeholder="Enter Emailid" class="form-control" disabled></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="resourceType">EmployeeID:</label>
+			<div class="col-sm-4">
+				<input type="number" id="resourceType" ng-model="employeeData.employeeId"
+					placeholder="Employee ID" class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="resourceType">First Name:</label>
+			<div class="col-sm-4">
+				<input type="text" id="resourceType" ng-model="employeeData.firstName"
+					placeholder="First Name" class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="resourceType">Middle Name:</label>
+			<div class="col-sm-4">
+				<input type="text" id="resourceType" ng-model="employeeData.middleName"
+					placeholder="Middle Name" class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="resourceType">Last Name:</label>
+			<div class="col-sm-4">
+				<input type="text" id="resourceType" ng-model="employeeData.lastName"
+					placeholder="Last Name" class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="resourceType">Manager ID:</label>
+			<div class="col-sm-4">
+				<input type="text" id="resourceType" ng-model="employeeData.managerId"
+					placeholder="Manager ID" class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="resourceType">Mobile No:</label>
+			<div class="col-sm-4">
+				<input type="number" id="resourceType" ng-model="employeeData.mobileNo"
+					placeholder="Mobile Number" class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="resourceType">City ID:</label>
+			<div class="col-sm-4">
+				<input type="text" id="resourceType" ng-model="employeeData.cityId"
+					placeholder="CityID" class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label col-sm-4" for="resourceType">Password:</label>
+			<div class="col-sm-4">
+				<input type="password" id="resourceType" ng-model="employeeData.password"
+					placeholder="Password" class="form-control"></input>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-4 col-sm-10">
+				<button class="btn btn-default" ng-click="updateEmployee()">Update</button>
+			</div>
+		</div>
+	</form>
+
+</div>

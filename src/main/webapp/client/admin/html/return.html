@@ -1,0 +1,22 @@
+<div ng-controller="returnController">
+	<div class="col-sm-offset-2 col-sm-8">
+		<table class="table">
+			<tr>
+				<th>Transaction ID</th>
+				<th>Title ID</th>
+				<th>Book ID</th>
+				<th>Title Name</th>
+				<th>Return</th>
+			</tr>
+			<tr ng-repeat="x in data">
+				<td>{{x.transactionId}}</td>
+				<td>{{x.titleId }}</td>
+				<td>{{x.resourceId}}</td>
+				<td>{{x.titleName }}</td>
+				<td><input type="button" value="Return"
+					ng-click="returnResource(x.transactionId,x.resourceId)"></td>
+			</tr>
+		</table>
+	</div>
+	
+</div>

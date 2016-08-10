@@ -1,0 +1,17 @@
+<div ng-controller="summaryLocationController" class="col-sm-offset-2 col-sm-8">
+	<table class="table">
+		<thead>
+			<tr style="text-align: center;">
+				<th class="col-sm-2">LocationId</th>
+				<th class="col-sm-2">LocationName</th>
+				<th class="col-sm-2">Count</th>
+			</tr>
+			<tr ng-repeat="x in data">
+				<td class="col-sm-2">{{x.locationId }}</td>
+				<td class="col-sm-2">{{x.locationName }}</td>
+				<td class="col-sm-2">{{x.count}}</td>
+			</tr>
+		</thead>
+		<tbody>
+	</table>
+</div>

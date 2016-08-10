@@ -1,0 +1,125 @@
+
+<!-- <link rel="stylesheet" href="client/assets/index.css"> -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+<div ng-controller="libraryController">
+<script>
+	function onSignIn(googleUser) {
+		var profile = googleUser.getBasicProfile();
+		var id_token = googleUser.getAuthResponse().id_token;
+		var emailId = profile.getEmail();
+		var firstName = profile.getName();
+		var lastName = profile.getFamilyName();
+		var googleId = profile.getId();
+		console.log(id_token);
+		console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+		console.log('Name: ' + profile.getName());
+		console.log('Image URL: ' + profile.getImageUrl());
+		console.log('Email: ' + profile.getEmail());
+		console.log('family name: ' + profile.getFamilyName());
+		GoogleLogin(emailId, googleId, firstName, lastName);
+	}
+
+	function getNewXmlHttp() {
+		var xmlhttp;
+		if (window.XMLHttpRequest) {
+			xmlhttp = new XMLHttpRequest();
+		} else {
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		return xmlhttp;
+	}
+
+	function GoogleLogin(emailId, googleId, firstName, lastName) {
+
+		var xmlhttp = getNewXmlHttp();
+		console.log("In login")
+
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				var text = xmlhttp.responseText;
+				console.log(text);
+				if (text.localeCompare("admin") == 0) {
+					//console.log("i am in admin");
+					location.href = "admin.html";
+				} else if (text.localeCompare("normal") == 0) {
+					location.href = "user.html";
+				}
+
+			}
+		}
+
+		xmlhttp.open("GET", "api/GoogleLogin?emailId=" + emailId + "&googleId="
+				+ googleId + "&firstName=" + firstName + "&lastName="
+				+ lastName, true);
+
+		xmlhttp.setRequestHeader("Content-type", "text/plain");
+
+		xmlhttp.send();
+	}
+	
+	function login(){
+
+		var xmlhttp = getNewXmlHttp();
+		var emailId = document.getElementById("inputEmail").value;
+		var password = document.getElementById("inputPassword").value;
+
+		console.log("In login");
+		
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				var text = JSON.parse(xmlhttp.responseText);
+				console.log(text);
+				text = text.message;
+				console.log(text);
+				
+				if (text.localeCompare("admin") == 0) {
+					//console.log("i am in admin");
+					location.href = "admin.html";
+				} else if (text.localeCompare("normal") == 0) {
+					location.href = "user.html";
+				}
+
+			}
+		}
+
+		xmlhttp.open("POST", "api/Login?emailId=" + emailId + "&password="
+				+ password , true);
+
+		xmlhttp.setRequestHeader("Content-type", "text/plain");
+
+		xmlhttp.send();
+	}
+
+	function signOut() {
+		var auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut().then(function() {
+			console.log('User signed out.');
+		});
+	}
+	</script>	
+		<div class="container col-sm-offset-4">
+
+			<form class="form-signin col-sm-4">
+				<h4 class="form-signin-heading">Please sign in</h4>
+				<label for="inputEmail" class="sr-only col-sm-4">Email
+					address</label> <input type="email" id="inputEmail"
+					class="form-control col-sm-4" placeholder="Email address" required
+					autofocus><br /> <label for="inputPassword"
+					class="sr-only col-sm-4">Password</label> <input type="password"
+					id="inputPassword" class="form-control col-sm-4"
+					placeholder="Password" required>
+				<button class="btn btn-primary btn-block" onclick="login()">Sign
+					in</button>
+				<br />
+				
+				<center style="font-family:Arial, Helvetica, sans-serif;" color="red">OR</center>
+				<br />
+				<div class="col-sm-offset-3 col-sm-10">
+						<div class="g-signin2" data-onsuccess="onSignIn"></div>
+				</div>
+			</form>
+
+		</div>
+</div>

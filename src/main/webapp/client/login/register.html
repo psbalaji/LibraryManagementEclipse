@@ -1,0 +1,18 @@
+<div ng-controller="libraryController" ng-init="getCity()">
+    <form action="/api/Register" id="registrationForm" >
+        Email: <input type="email" name = "emailId" placeholder="Email" required><br />
+        Employee ID: <input type="text" name = "empId" placeholder = "Employee ID" required><br />
+        <input type="hidden" name = "googleId" value="">
+        First Name<input type = "text" name = "firstName" placeholder = "First Name" required><br />
+        Middle Name<input type = "text" name = "middleName" placeholder="Middle Name" required><br />
+        Manager ID<input type = "text" name = "managerId" placeholder="Manager ID" required><br />
+        Mobile Number<input type = "number" name = "mobileNo" placeholder="Mobile Number" required><br />
+        City<select ng-model='selectedCity'>
+        	<option ng-selected="">
+        	</option>
+        </select>
+        Password: <input type="password" name="password" id="password" required ng-model="pass"><br />
+        Re-Enter Password: <input type="password" name="reenterpass" id="reenterpass" required ng-model="repass"><br />
+        <input type="submit" value = "submit" >
+    </form>
+</div>

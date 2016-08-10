@@ -1,0 +1,97 @@
+
+    <link rel="stylesheet" href="style.css">
+   
+    <script src="https://code.angularjs.org/1.3.0-rc.2/angular.js"></script>
+    <script src="app.js"></script>
+    <style type="text/css">
+      textarea {
+          min-height:110px;
+        }
+
+        .noresize {
+          resize: none; 
+        }
+
+        .vresize {
+          resize: vertical; 
+        }
+          
+        .hresize {
+          resize: horizontal;  
+        }  
+    </style>
+<div ng-controller="StarCtrl" ng-init="getBook()" >
+	<table>
+		<tr>
+			<th>Transaction ID</th>
+			<th>Title ID</th>
+			<th>Book ID</th>
+			<th>Title Name</th>
+			<th>Review</th>
+		</tr>
+		<tr ng-repeat="x in data">
+			<td>{{x.transactionId}}</td>
+			<td>{{x.titleId }}</td>
+			<td>{{x.resourceId}}</td>
+			<td>{{x.titleName }}</td>
+			<td><input type="button" value="Review"
+				ng-click="review(x.titleId)">
+				</td>
+		</tr>
+	</table>
+	
+	<table class="table" >
+			<thead>
+				<tr>
+					<th class="col-sm-2">Transaction ID</th>
+					<th class="col-sm-2">Title ID</th>
+					<th class="col-sm-2">Book ID</th>
+					<th class="col-sm-2">Title Name</th>
+					<th class="col-sm-2">Review</th>
+				</tr>
+				<tr ng-repeat="x in data">
+					<td class="col-sm-2">{{x.transactionId}}</td>
+					<td class="col-sm-2">{{x.titleId}}</td>
+					<td class="col-sm-2">{{x.resourceId}}</td>
+					<td class="col-sm-2">{{x.titleName}}</td>
+					<td><div class="form-group" ng-if="!suggestClicked">
+							<div>
+								<button class="btn btn-default" ng-click="review(x.titleId)">Review</button>
+							</div>
+						</div>
+						</td>
+				</tr>
+			</thead>
+			<tbody>
+		</table>
+	
+	<!-- Rating part-->
+	<div ng-if="display">
+			<div ng-controller="StarCtrl"> 
+    <div class=col-md-12>
+        <div ng-repeat="rating in ratings">
+        <h2>{{rating.current}} /
+            {{rating.max}}</h2>
+            <div star-rating rating-value="rating.current" max="rating.max" on-rating-selected="getSelectedRating(rating)"></div>
+        </div>
+    </div>
+    <div class="col-md-12 clear">
+      <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-default" data-ng-click="setMinrate()">Min Rate</button>
+          <button type="button" class="btn btn-default" data-ng-click="setMaxrate()">Max Rate</button>
+        </div><br/><br/><br/>
+       <!--  textarea -->
+        Review:
+        <div class="container">
+          <textarea class="form-control" ng-model="mytextarea"></textarea>
+          {{mytextarea}}
+        </div>
+        <div class="btn-group" role="group">
+        <button type="button" class="btn btn-primary" data-ng-click="sendRateandReview()">Send</button>
+        </div>
+    </div>
+  </div>
+</div>
+	</div>
+</div>

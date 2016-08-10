@@ -38,6 +38,14 @@ public class Employee {
 	/** The google id. */
 	private String googleId;
 	
+	@Override
+	public String toString() {
+		return "Employee [emailId=" + emailId + ", employeeId=" + employeeId + ", googleId=" + googleId + ", firstName="
+				+ firstName + ", middleName=" + middleName + ", lastName=" + lastName + ", managerId=" + managerId
+				+ ", mobileNo=" + mobileNo + ", cityId=" + cityId + ", password=" + password + ", roleId=" + roleId
+				+ ", blackListed=" + blackListed + "]";
+	}
+
 	/** The first name. */
 	private String firstName;
 	
@@ -54,10 +62,14 @@ public class Employee {
 	private String mobileNo;
 	
 	/** The city id. */
-	private String cityId;
+	private int cityId;
 	
 	/** The password. */
 	private String password;
+	
+	private int roleId;
+	
+	private int blackListed;
 	
 	
 	/**
@@ -209,7 +221,7 @@ public class Employee {
 	 *
 	 * @return the city id
 	 */
-	public String getCityId() {
+	public int getCityId() {
 		return cityId;
 	}
 	
@@ -218,8 +230,24 @@ public class Employee {
 	 *
 	 * @param cityId the new city id
 	 */
-	public void setCityId(String cityId) {
+	public void setCityId(int cityId) {
 		this.cityId = cityId;
+	}
+
+	public int getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
+	}
+
+	public int getBlackListed() {
+		return blackListed;
+	}
+
+	public void setBlackListed(int blackListed) {
+		this.blackListed = blackListed;
 	}
 	
 	/**

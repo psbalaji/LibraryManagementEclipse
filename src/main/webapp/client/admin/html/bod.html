@@ -1,0 +1,14 @@
+<div class="col-sm-offset-1 col-sm-10" ng-controller="bodController">
+		<table class="table" >
+			<thead>
+				<tr>
+					<th class="col-sm-2">Title Name</th>
+				</tr>
+				<tr ng-repeat="x in data">
+					<td class="col-sm-2">{{x.titleId }}</td>
+				</tr>
+			</thead>
+			<tbody>
+		</table>
+		<center ng-bind="userMessage"></center>
+	</div>

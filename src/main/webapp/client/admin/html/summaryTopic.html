@@ -1,0 +1,17 @@
+<div ng-controller="summaryTopicController" class="col-sm-offset-2 col-sm-8">
+	<table class="table">
+		<thead>
+			<tr style="text-align: center;">
+				<th class="col-sm-2">TopicId</th>
+				<th class="col-sm-2">TopicName</th>
+				<th class="col-sm-2">Count</th>
+			</tr>
+			<tr ng-repeat="x in data">
+				<td class="col-sm-2">{{x.topicId }}</td>
+				<td class="col-sm-2">{{x.topicName }}</td>
+				<td class="col-sm-2">{{x.count}}</td>
+			</tr>
+		</thead>
+		<tbody>
+	</table>
+</div>
